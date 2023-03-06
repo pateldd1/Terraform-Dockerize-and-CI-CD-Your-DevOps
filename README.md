@@ -10,3 +10,9 @@ npm install
 ```sh
 npm start
 ```
+
+(Optional)
+```sh
+DB_NAME={name_of_db} DB_HOST={host_url_of_db} DB_USER={username_of_db} DB_PASS={password_of_db} npm start
+```
+to run `/db_healthcheck` endpoint
