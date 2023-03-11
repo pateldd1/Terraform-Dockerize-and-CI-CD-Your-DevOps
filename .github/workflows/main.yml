@@ -22,6 +22,6 @@ jobs:
 
     - name: Build and Push Docker image
       run: |
-        jf docker build -t interview:latest .
-        jf docker tag interview:latest cryptome2.jfrog.io/default-docker-virtual/interview:latest
-        jf docker push cryptome2.jfrog.io/default-docker-virtual/interview:latest
+        docker build -t interview:latest .
+        docker tag interview:latest cryptome2.jfrog.io/default-docker-virtual/interview:latest
+        docker push cryptome2.jfrog.io/default-docker-virtual/interview:latest
