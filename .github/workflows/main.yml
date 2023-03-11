@@ -16,7 +16,7 @@ jobs:
       uses: JFrogDev/jfrog-cli-action@master
       with:
         server-id: 'cryptome2'
-        url: 'cryptome2.jfrog.io'
+        url: 'cryptome2.jfrog.io/'
         username: 'devanshpatel22@gmail.com'
         password: ${{ secrets.JFROG_PASSWORD }}
 
