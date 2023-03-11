@@ -1,0 +1,8 @@
+version: 1
+type: npm
+resolver:
+  repo: default-npm-virtual
+  serverId: cryptome2
+deployer:
+  repo: default-npm-virtual
+  serverId: cryptome2
