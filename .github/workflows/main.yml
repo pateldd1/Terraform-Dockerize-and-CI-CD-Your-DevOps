@@ -27,6 +27,6 @@ jobs:
       - name: Publish to JFrog Artifactory
         uses: JFrogDev/jfrog-cli-action@v1
         with:
-          server-id: your-jfrog-server-id
+          server-id: interview
           command: rt docker-push
           arguments: cryptome.jfrog.io/docker/interview:latest
