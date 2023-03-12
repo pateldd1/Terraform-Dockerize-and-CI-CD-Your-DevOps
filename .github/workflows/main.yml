@@ -26,4 +26,4 @@ jobs:
         docker build -t interview:latest .
         docker tag interview:latest cryptome2.jfrog.io/default-docker-virtual/interview:latest
         docker push cryptome2.jfrog.io/default-docker-virtual/interview:latest
-        docker run -p 80:3000 cryptome2.jfrog.io/default-docker-virtual/interview:latest -e DB_TYPE=postgresql -e DB_HOST=${{ secrets.DB_HOST }} -e DB_USER=${{ secrets.DB_USER }} -e DB_NAME=${{ secrets.DB_NAME }} -e DB_PASS=${{ secrets.DB_PASS }}
+        docker run -p 80:3000 -e DB_TYPE=postgresql -e DB_HOST=${{ secrets.DB_HOST }} -e DB_USER=${{ secrets.DB_USER }} -e DB_NAME=${{ secrets.DB_NAME }} -e DB_PASS=${{ secrets.DB_PASS }} cryptome2.jfrog.io/default-docker-virtual/interview:latest
