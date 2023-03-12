@@ -20,9 +20,10 @@ jobs:
         username: 'devanshpatel22@gmail.com'
         password: ${{ secrets.JFROG_PASSWORD }}
 
-    - name: Build and Push Docker image
+    - name: Build, Push, and Run Docker image
       run: |
         docker login --username=devanshpatel22@gmail.com --password=${{ secrets.DOCKER_PASSWORD }} cryptome2.jfrog.io
         docker build -t interview:latest .
         docker tag interview:latest cryptome2.jfrog.io/default-docker-virtual/interview:latest
         docker push cryptome2.jfrog.io/default-docker-virtual/interview:latest
+        docker run -p 80:3000 cryptome2.jfrog.io/default-docker-virtual/interview:latest -e DB_TYPE=postgresql -e DB_HOST=${{ secrets.DB_HOST }} -e DB_USER=${{ secrets.DB_USER }} -e DB_NAME=${{ secrets.DB_NAME }} -e DB_PASS=${{ secrets.DB_PASS }}
