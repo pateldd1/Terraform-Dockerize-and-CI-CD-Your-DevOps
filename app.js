@@ -12,6 +12,10 @@ app.get("/", function (req, res) {
   res.send("Hello world!");
 });
 
+app.get("/health", async function (_, res) {
+  res.sendStatus(200);
+});
+
 app.get("/db_healthcheck", async function (_, res) {
   const { Pool } = require("pg");
   const pool = new Pool(PG_CONFIG);
