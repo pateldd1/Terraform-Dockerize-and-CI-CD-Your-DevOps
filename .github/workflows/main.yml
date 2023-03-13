@@ -1,9 +1,14 @@
-name: Build and Push to JFrog
+name: Build and Push to JFrog and AWS
 
 on:
   push:
     branches:
       - main
+
+env:
+  ECR_REGISTRY: 429363805278.dkr.ecr.us-east-1.amazonaws.com
+  ECR_REPOSITORY: interview
+  IMAGE_TAG: ${{ github.sha }}
 
 jobs:
   build-and-push:
@@ -19,8 +24,30 @@ jobs:
         url: 'https://cryptome2.jfrog.io/'
         username: 'devanshpatel22@gmail.com'
         password: ${{ secrets.JFROG_PASSWORD }}
+  
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
 
-    - name: Build and Push Docker image
+    - name: Log in to Amazon ECR
+      uses: aws-actions/amazon-ecr-login@v1
+      with:
+        registry: ${{ env.ECR_REGISTRY }}
+    
+    - name: Build and tag Docker image
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+    - name: Push Docker image to Amazon ECR
+      run: |
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest  
+
+    - name: Build and Push Docker image to jfrog
       run: |
         docker login --username=devanshpatel22@gmail.com --password=${{ secrets.DOCKER_PASSWORD }} cryptome2.jfrog.io
         docker build -t interview:latest .
