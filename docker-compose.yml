@@ -1,0 +1,24 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      DATABASE_URL: postgres://postgres:postgres@db:5432/postgres
+    ports:
+      - "5432:5432"
+  app:
+    build: .
+    command: node app.js
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/postgres
+      DB_USER: postgres
+      DB_HOST: db
+      DB_NAME: postgres
+      DB_PASS: postgres
