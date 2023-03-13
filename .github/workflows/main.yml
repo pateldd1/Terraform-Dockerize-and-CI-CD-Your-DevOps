@@ -23,6 +23,7 @@ jobs:
     - name: Build and Push Docker image
       run: |
         docker login --username=devanshpatel22@gmail.com --password=${{ secrets.DOCKER_PASSWORD }} cryptome2.jfrog.io
+        docker login --username=devanshpatel22@gmail.com --password=${{ secrets.DOCKER_PASSWORD }} 429363805278.dkr.ecr.us-east-1.amazonaws.com
         docker build -t interview:latest .
         docker tag interview:latest cryptome2.jfrog.io/default-docker-virtual/interview:latest
         docker tag interview:latest 429363805278.dkr.ecr.us-east-1.amazonaws.com/interview:latest
