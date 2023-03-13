@@ -5,9 +5,10 @@ WORKDIR /app
 COPY . /app
 
 RUN npm install
+RUN npm install pm2 -g
 
 EXPOSE 3000
 
 ENV NODE_ENV=production
 
-CMD ["node", "app.js"]
+CMD ["pm2-runtime", "app.js"]
