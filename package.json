@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "DB_USER=postgres DB_NAME=postgres DB_HOST=localhost DB_PASS=postgres npm start",
+    "start": "DB_USER=postgres DB_NAME=postgres DB_HOST=localhost DB_PASS=postgres nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
