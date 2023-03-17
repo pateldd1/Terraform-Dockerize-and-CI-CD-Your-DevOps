@@ -8,7 +8,7 @@ npm install
 
 3. Run the app
 ```sh
-npm start
+npm start or docker-compose up
 ```
 
 (Optional)
