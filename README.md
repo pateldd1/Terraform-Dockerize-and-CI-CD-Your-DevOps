@@ -18,6 +18,6 @@ DB_NAME={name_of_db} DB_HOST={host_url_of_db} DB_USER={username_of_db} DB_PASS={
 to run `/db_healthcheck` endpoint
 
 # Production
-App is hosted at http://interview-load-balancer-1812788571.us-east-1.elb.amazonaws.com using AWS ECS and Fargate 
+App was hosted at http://interview-load-balancer-1812788571.us-east-1.elb.amazonaws.com using AWS ECS and Fargate 
 
-http://interview-load-balancer-1812788571.us-east-1.elb.amazonaws.com/db_healthcheck works too.
+http://interview-load-balancer-1812788571.us-east-1.elb.amazonaws.com/db_healthcheck worked too.
