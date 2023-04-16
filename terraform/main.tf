@@ -4,6 +4,7 @@ provider "aws" {
 
 locals {
   cluster_name = "my-ecs-cluster"
+  azs          = ["us-east-1a", "us-east-1b", "us-east-1c"]
 }
 
 resource "aws_vpc" "this" {
@@ -17,10 +18,11 @@ resource "aws_vpc" "this" {
 }
 
 resource "aws_subnet" "public" {
-  count = 2
+  count = length(local.azs)
 
-  cidr_block = "10.0.${count.index + 1}.0/24"
-  vpc_id     = aws_vpc.this.id
+  cidr_block        = "10.0.${count.index + 1}.0/24"
+  vpc_id            = aws_vpc.this.id
+  availability_zone = local.azs[count.index]
 
   tags = {
     Name = "ECS-Public-Subnet-${count.index + 1}"
@@ -28,10 +30,11 @@ resource "aws_subnet" "public" {
 }
 
 resource "aws_subnet" "private" {
-  count = 2
+  count = length(local.azs)
 
-  cidr_block = "10.0.${count.index + 101}.0/24"
-  vpc_id     = aws_vpc.this.id
+  cidr_block        = "10.0.${count.index + 101}.0/24"
+  vpc_id            = aws_vpc.this.id
+  availability_zone = local.azs[count.index]
 
   tags = {
     Name = "ECS-Private-Subnet-${count.index + 1}"
