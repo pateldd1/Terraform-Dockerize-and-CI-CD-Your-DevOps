@@ -11,6 +11,10 @@ data "aws_default_security_group" "default" {
   vpc_id = aws_vpc.this.id
 }
 
+data "aws_secretsmanager_secret_version" "db_credentials" {
+  secret_id = aws_secretsmanager_secret.db_credentials.id
+}
+
 resource "aws_vpc" "this" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true
@@ -119,17 +123,6 @@ resource "aws_route_table_association" "private" {
   route_table_id = aws_route_table.private[count.index].id
 }
 
-resource "aws_security_group" "bastion" {
-  name        = "ECS-Bastion-SG"
-  description = "Security group for the bastion host"
-  vpc_id      = aws_vpc.this.id
-  type        = "ingress"
-  from_port   = 22
-  to_port     = 22
-  protocol    = "tcp"
-  cidr_blocks = ["0.0.0.0/0"]
-}
-
 resource "aws_security_group_rule" "bastion_egress" {
   security_group_id = data.aws_default_security_group.default.id
 
@@ -161,16 +154,6 @@ resource "aws_instance" "bastion" {
               aws s3 cp s3://your-bucket-name/crowdstrike_install.yml /tmp/crowdstrike_install.yml
               ansible-playbook /tmp/crowdstrike_install.yml
               EOF
-}
-
-resource "aws_security_group" "ecs_tasks" {
-  name        = "ECS-Tasks-SG"
-  description = "Security group for ECS tasks"
-  vpc_id      = aws_vpc.this.id
-
-  tags = {
-    Name = "ECS-Tasks-SG"
-  }
 }
 
 resource "aws_ecs_cluster" "this" {
@@ -239,19 +222,48 @@ resource "aws_iam_role_policy" "ecs_task_role_policy" {
   })
 }
 
-variable "my_secret_value" {
-  default = ""
+
+resource "aws_db_subnet_group" "this" {
+  name       = "interview-subnet-group"
+  subnet_ids = aws_subnet.private.*.id
+
+  tags = {
+    Name = "example-subnet-group"
+  }
 }
 
-resource "aws_secretsmanager_secret" "my_secret" {
-  name        = "my_secret"
-  description = "This is a secret for demonstration purposes"
+resource "aws_db_instance" "this" {
+  allocated_storage      = 20
+  engine                 = "postgres"
+  engine_version         = "13.4"
+  instance_class         = "db.t2.micro"
+  name                   = "interview_db"
+  username               = jsondecode(data.aws_secretsmanager_secret_version.db_credentials.secret_string)["DB_USER"]
+  password               = jsondecode(data.aws_secretsmanager_secret_version.db_credentials.secret_string)["DB_PASS"]
+  parameter_group_name   = "default.postgres13"
+  skip_final_snapshot    = true
+  publicly_accessible    = false
+  vpc_security_group_ids = [data.aws_default_security_group.default.id]
+  db_subnet_group_name   = aws_db_subnet_group.this.name
+}
+
+
+resource "aws_secretsmanager_secret" "db_credentials" {
+  name        = "db_credentials"
+  description = "This is a secret for Database Credentials"
 }
 
 # pass in the secret at runtime when doing terraform apply
-resource "aws_secretsmanager_secret_version" "my_secret_version" {
-  secret_id     = aws_secretsmanager_secret.my_secret.id
-  secret_string = lookup(var.my_secret_value, "")
+resource "aws_secretsmanager_secret_version" "db_full_credentials" {
+  secret_id = aws_secretsmanager_secret.db_credentials.id
+  secret_string = jsonencode({
+    DB_USER = jsondecode(aws_secretsmanager_secret_version.db_credentials.secret_string)["username"]
+    DB_PASS = jsondecode(aws_secretsmanager_secret_version.db_credentials.secret_string)["password"]
+    DB_HOST = aws_db_instance.this.endpoint
+    DB_NAME = aws_db_instance.this.name
+  })
+
+  depends_on = [aws_db_instance.this]
 }
 
 resource "aws_ecs_task_definition" "this" {
@@ -275,6 +287,20 @@ resource "aws_ecs_task_definition" "this" {
         }
       ],
       essential = true
+      secrets = [
+        {
+          name      = "DB_USER"
+          valueFrom = data.aws_secretsmanager_secret_version.db_full_credentials.arn
+        },
+        {
+          name      = "DB_PASS"
+          valueFrom = data.aws_secretsmanager_secret_version.db_full_credentials.arn
+        },
+        {
+          name      = "DB_NAME"
+          valueFrom = data.aws_secretsmanager_secret_version.db_full_credentials.arn
+        }
+      ]
     }
   ])
 }
@@ -299,6 +325,8 @@ resource "aws_ecs_service" "this" {
   depends_on = [aws_lb_listener.frontend]
 }
 
+
+# AWS ALB stuff
 resource "aws_lb" "this" {
   name               = "ECS-ALB"
   internal           = false
@@ -365,18 +393,4 @@ resource "aws_lb_listener" "frontend" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.this.arn
   }
-}
-
-resource "aws_db_instance" "this" {
-  allocated_storage      = 20
-  engine                 = "postgres"
-  engine_version         = "13.4"
-  instance_class         = "db.t2.micro"
-  name                   = "terraform_practice_db"
-  username               = local.secrets.db_username
-  password               = local.secrets.db_password
-  parameter_group_name   = "default.postgres13"
-  skip_final_snapshot    = true
-  publicly_accessible    = false
-  vpc_security_group_ids = [data.aws_default_security_group.default.id]
 }
