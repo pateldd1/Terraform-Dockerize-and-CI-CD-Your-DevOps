@@ -104,3 +104,7 @@ dist
 .tern-port
 
 my_password.txt
+
+.terraform
+
+.terraform.lock.hcl
