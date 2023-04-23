@@ -13,7 +13,7 @@ resource "aws_ecs_task_definition" "this" {
 
   container_definitions = jsonencode([{
     name  = "devops-app"
-    image = "devops-image"
+    image = "429363805278.dkr.ecr.us-east-1.amazonaws.com/interview"
     portMappings = [{
       containerPort = 80
     }]
