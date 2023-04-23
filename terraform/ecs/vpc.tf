@@ -2,7 +2,7 @@ resource "aws_vpc" "this" {
   cidr_block = "10.0.0.0/16"
 
   tags = {
-    Name = "example-vpc"
+    Name = "devops-vpc"
   }
 }
 
@@ -14,7 +14,7 @@ resource "aws_subnet" "private" {
   availability_zone = "us-east-1${element(["a", "b", "c"], count.index)}"
 
   tags = {
-    Name = "example-private-subnet-${count.index + 1}"
+    Name = "devops-private-subnet-${count.index + 1}"
   }
 }
 
@@ -26,18 +26,18 @@ resource "aws_subnet" "public" {
   availability_zone = "us-east-1${element(["a", "b", "c"], count.index)}"
 
   tags = {
-    Name = "example-public-subnet-${count.index + 1}"
+    Name = "devops-public-subnet-${count.index + 1}"
   }
 }
 
 resource "aws_security_group" "db" {
-  name        = "example-db"
+  name        = "devops-db"
   description = "Allow traffic to PostgreSQL"
   vpc_id      = aws_vpc.this.id
 }
 
 resource "aws_security_group" "ecs" {
-  name        = "example-ecs"
+  name        = "devops-ecs"
   description = "Allow traffic to ECS services"
   vpc_id      = aws_vpc.this.id
 }

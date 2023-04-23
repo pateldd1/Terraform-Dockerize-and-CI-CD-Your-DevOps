@@ -1,9 +1,9 @@
 resource "aws_ecs_cluster" "this" {
-  name = "example-cluster"
+  name = "devops-cluster"
 }
 
 resource "aws_ecs_task_definition" "this" {
-  family                   = "example-task"
+  family                   = "devops-task"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = "256"
@@ -12,8 +12,8 @@ resource "aws_ecs_task_definition" "this" {
   task_role_arn            = aws_iam_role.ecs_task_role.arn
 
   container_definitions = jsonencode([{
-    name  = "example-app"
-    image = "example-image"
+    name  = "devops-app"
+    image = "devops-image"
     portMappings = [{
       containerPort = 80
     }]
@@ -40,7 +40,7 @@ resource "aws_ecs_task_definition" "this" {
 }
 
 resource "aws_ecs_service" "this" {
-  name            = "example-service"
+  name            = "devops-service"
   cluster         = aws_ecs_cluster.this.id
   task_definition = aws_ecs_task_definition.this.arn
   launch_type     = "FARGATE"
@@ -51,11 +51,11 @@ resource "aws_ecs_service" "this" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.this.arn
-    container_name   = "example-app"
+    container_name   = "devops-app"
     container_port   = 80
   }
 
   desired_count = 1
 
-  depends_on = [aws_db_instance.example, aws_lb_listener.this]
+  depends_on = [aws_db_instance.devops, aws_lb_listener.this]
 }

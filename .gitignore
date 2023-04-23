@@ -1,3 +1,8 @@
+# Compiled files
+*.tfstate
+*.tfstate.backup
+*.tfstate.lock.info
+
 # Logs
 logs
 *.log
@@ -108,3 +113,6 @@ my_password.txt
 .terraform
 
 .terraform.lock.hcl
+
+.terraform/
+.vagrant/

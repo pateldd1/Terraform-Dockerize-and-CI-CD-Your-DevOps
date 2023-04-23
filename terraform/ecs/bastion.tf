@@ -1,5 +1,5 @@
 resource "aws_security_group" "bastion" {
-  name        = "example-bastion"
+  name        = "devops-bastion"
   description = "Allow traffic to the bastion host"
   vpc_id      = aws_vpc.this.id
 }
@@ -24,7 +24,7 @@ resource "aws_instance" "bastion" {
   vpc_security_group_ids = [aws_security_group.bastion.id]
 
   tags = {
-    Name = "example-bastion"
+    Name = "devops-bastion"
   }
 }
 

@@ -7,19 +7,11 @@
     "start": "DB_USER=postgres DB_NAME=postgres DB_HOST=localhost DB_PASS=postgres nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/LendBuzz/interview.git"
-  },
   "dependencies": {
     "express": "^4.18.2",
     "nodemon": "^2.0.21",
     "pg": "^8.9.0"
   },
   "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/LendBuzz/interview/issues"
-  },
-  "homepage": "https://github.com/LendBuzz/interview#readme"
+  "license": "ISC"
 }
