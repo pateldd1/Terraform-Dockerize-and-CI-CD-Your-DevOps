@@ -13,7 +13,7 @@ resource "aws_ecs_task_definition" "this" {
 
   container_definitions = jsonencode([{
     name  = "devops-app"
-    image = "429363805278.dkr.ecr.us-east-1.amazonaws.com/interview"
+    image = "429363805278.dkr.ecr.us-east-1.amazonaws.com/interview:latest"
     portMappings = [{
       containerPort = 80
     }]
@@ -46,7 +46,8 @@ resource "aws_ecs_service" "this" {
   launch_type     = "FARGATE"
 
   network_configuration {
-    subnets = aws_subnet.private.*.id
+    subnets          = aws_subnet.private.*.id
+    assign_public_ip = false
   }
 
   load_balancer {
