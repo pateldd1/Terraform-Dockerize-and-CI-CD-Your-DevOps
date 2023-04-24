@@ -60,6 +60,7 @@ resource "aws_ecs_service" "this" {
 
   network_configuration {
     subnets          = aws_subnet.private.*.id
+    security_groups  = [aws_security_group.main.id]
     assign_public_ip = false
   }
 
