@@ -16,3 +16,9 @@ resource "aws_db_instance" "devops" {
   vpc_security_group_ids    = [aws_security_group.main.id]
   db_subnet_group_name      = aws_db_subnet_group.devops.name
 }
+resource "aws_ssm_parameter" "db_host" {
+  name        = "DB_HOST"
+  description = "RDS instance endpoint"
+  type        = "String"
+  value       = aws_db_instance.devops.endpoint
+}

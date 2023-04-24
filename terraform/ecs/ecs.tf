@@ -29,7 +29,7 @@ resource "aws_ecs_task_definition" "this" {
       },
       {
         name      = "DB_HOST"
-        valueFrom = "${data.aws_secretsmanager_secret_version.db_credentials.arn}:DB_HOST::"
+        valueFrom = aws_ssm_parameter.db_host.arn
       },
       {
         name      = "DB_NAME"
