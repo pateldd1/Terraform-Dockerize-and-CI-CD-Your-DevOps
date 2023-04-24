@@ -30,16 +30,17 @@ resource "aws_subnet" "public" {
   }
 }
 
-resource "aws_security_group" "db" {
-  name        = "devops-db"
-  description = "Allow traffic to PostgreSQL"
+resource "aws_security_group" "main" {
+  name        = "main"
+  description = "Main security group"
   vpc_id      = aws_vpc.this.id
-}
 
-resource "aws_security_group" "ecs" {
-  name        = "devops-ecs"
-  description = "Allow traffic to ECS services"
-  vpc_id      = aws_vpc.this.id
+  ingress {
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 resource "aws_internet_gateway" "this" {
@@ -60,38 +61,4 @@ resource "aws_route_table_association" "public" {
 
   subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
-}
-
-resource "aws_security_group" "main" {
-  name        = "main-sg"
-  description = "Main security group"
-  vpc_id      = aws_vpc.this.id
-
-  ingress {
-    from_port   = 0
-    to_port     = 65535
-    protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/8"]
-  }
-
-  ingress {
-    from_port   = 0
-    to_port     = 65535
-    protocol    = "udp"
-    cidr_blocks = ["10.0.0.0/8"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 65535
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 65535
-    protocol    = "udp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 }

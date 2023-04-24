@@ -34,8 +34,21 @@ resource "aws_ecs_task_definition" "this" {
       {
         name      = "DB_NAME"
         valueFrom = "${data.aws_secretsmanager_secret_version.db_credentials.arn}:DB_NAME::"
+      },
+      {
+        name      = "PORT"
+        valueFrom = "${data.aws_secretsmanager_secret_version.db_credentials.arn}:PORT::"
       }
     ]
+
+    logConfiguration = {
+      logDriver = "awslogs"
+      options = {
+        awslogs-group         = "/ecs/devops-task"
+        awslogs-region        = "us-east-1"
+        awslogs-stream-prefix = "ecs"
+      }
+    }
   }])
 }
 

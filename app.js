@@ -38,7 +38,6 @@ app.get("/db_healthcheck", async function (_, res) {
   return res.send(d_res);
 });
 
-app.listen(3000, "0.0.0.0", 10, () => {
+app.listen(process.env.PORT || "3000", "0.0.0.0", 10, () => {
   console.log("app is running in `http://localhost:3000/`...");
 });
-//
