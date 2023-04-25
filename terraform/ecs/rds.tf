@@ -9,16 +9,10 @@ resource "aws_db_instance" "devops" {
   engine_version            = "13"
   instance_class            = "db.t3.micro"
   db_name                   = "devops_database"
-  skip_final_snapshot       = false
+  skip_final_snapshot       = true
   final_snapshot_identifier = "devops-db-final-snapshot"
   username                  = jsondecode(data.aws_secretsmanager_secret_version.db_credentials.secret_string)["username"]
   password                  = jsondecode(data.aws_secretsmanager_secret_version.db_credentials.secret_string)["password"]
   vpc_security_group_ids    = [aws_security_group.main.id]
   db_subnet_group_name      = aws_db_subnet_group.devops.name
-}
-resource "aws_ssm_parameter" "db_host" {
-  name        = "DB_HOST"
-  description = "RDS instance endpoint"
-  type        = "String"
-  value       = aws_db_instance.devops.endpoint
 }

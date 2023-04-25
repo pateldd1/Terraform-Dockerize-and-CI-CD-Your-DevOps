@@ -18,6 +18,13 @@ resource "aws_ecs_task_definition" "this" {
       containerPort = 80
     }]
 
+    environment = [
+      {
+        name  = "DB_HOST"
+        value = aws_db_instance.devops.endpoint
+      }
+    ]
+
     secrets = [
       {
         name      = "DB_USER"
@@ -26,10 +33,6 @@ resource "aws_ecs_task_definition" "this" {
       {
         name      = "DB_PASS"
         valueFrom = "${data.aws_secretsmanager_secret_version.db_credentials.arn}:password::"
-      },
-      {
-        name      = "DB_HOST"
-        valueFrom = aws_ssm_parameter.db_host.arn
       },
       {
         name      = "DB_NAME"
