@@ -1,4 +1,4 @@
-name: Build and Push to JFrog and AWS
+name: Build and Push to AWS
 
 on:
   push:
@@ -17,14 +17,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       
-    - name: Login to JFrog
-      uses: jfrog/setup-jfrog-cli@master
-      with:
-        server-id: 'cryptome2'
-        url: 'https://cryptome2.jfrog.io/'
-        username: 'devanshpatel22@gmail.com'
-        password: ${{ secrets.JFROG_PASSWORD }}
-  
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -45,11 +37,4 @@ jobs:
     - name: Push Docker image to Amazon ECR
       run: |
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest  
-
-    - name: Build and Push Docker image to jfrog
-      run: |
-        docker login --username=devanshpatel22@gmail.com --password=${{ secrets.DOCKER_PASSWORD }} cryptome2.jfrog.io
-        docker build -t interview:latest .
-        docker tag interview:latest cryptome2.jfrog.io/default-docker-virtual/interview:latest
-        docker push cryptome2.jfrog.io/default-docker-virtual/interview:latest
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
