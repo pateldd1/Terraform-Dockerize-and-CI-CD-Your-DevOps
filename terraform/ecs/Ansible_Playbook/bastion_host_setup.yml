@@ -1,0 +1,34 @@
+- name: Bastion Host Setup
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Schedule periodic updates
+      cron:
+        name: "Install updates"
+        minute: "0"
+        hour: "3"
+        job: "yum update -y"
+
+    - name: Install Datadog Agent
+      become: yes
+      ansible.builtin.package:
+        name: "datadog-agent"
+        state: present
+        update_cache: yes
+      when: "'{{ ansible_distribution }}' == 'Amazon'"
+
+    - name: Configure Datadog Agent
+      become: yes
+      ansible.builtin.template:
+        src: datadog.yaml.j2
+        dest: /etc/datadog-agent/datadog.yaml
+        owner: dd-agent
+        group: dd-agent
+        mode: 0644
+
+    - name: Restart Datadog Agent
+      become: yes
+      ansible.builtin.service:
+        name: datadog-agent
+        state: restarted
+        enabled: yes        
