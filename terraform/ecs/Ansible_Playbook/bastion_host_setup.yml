@@ -1,34 +1,47 @@
 - name: Bastion Host Setup
   hosts: localhost
-  become: yes
+  become: 'yes'
   tasks:
     - name: Schedule periodic updates
       cron:
-        name: "Install updates"
-        minute: "0"
-        hour: "3"
-        job: "yum update -y"
+        name: Install updates
+        minute: '0'
+        hour: '3'
+        job: yum update -y
 
-    - name: Install Datadog Agent
+    - name: Retrieve Datadog API key from Secrets Manager
+      community.aws.aws_ssm:
+        name: datadog_api_key
+        region: us-east-1
+        register: datadog_scret
+
+    - name: Set Datadog API key variable
+      set_fact:
+        datadog_api_key: '{{ datadog_secret.secret[''datadog_api_key''] }}'
+
+    - name: Install DataDog Agent
+      hosts: all
       become: yes
-      ansible.builtin.package:
-        name: "datadog-agent"
-        state: present
-        update_cache: yes
-      when: "'{{ ansible_distribution }}' == 'Amazon'"
+      vars:
+        datadog_api_key: "{{ lookup('community.aws.aws_ssm', 'datadog_api_key', region='us-east-1') }}"
+      roles:
+      - role: datadog.datadog
+        vars:
+          datadog_config:
+            api_key: "{{ datadog_api_key }}"
 
     - name: Configure Datadog Agent
-      become: yes
+      become: 'yes'
       ansible.builtin.template:
         src: datadog.yaml.j2
         dest: /etc/datadog-agent/datadog.yaml
         owner: dd-agent
         group: dd-agent
-        mode: 0644
+        mode: 420
 
     - name: Restart Datadog Agent
-      become: yes
+      become: 'yes'
       ansible.builtin.service:
         name: datadog-agent
         state: restarted
-        enabled: yes        
+        enabled: 'yes'

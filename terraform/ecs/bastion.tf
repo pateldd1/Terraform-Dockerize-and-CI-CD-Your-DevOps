@@ -16,8 +16,8 @@ resource "aws_instance" "bastion" {
               yum update -y
               yum install -y python3-pip
               pip3 install ansible
-              DD_API_KEY=$(aws secretsmanager get-secret-value --secret-id datadog_api_key --query SecretString --output text)
-              ansible-playbook ./Ansible_Playbook/bastion_host_setup.yml --extra-vars "datadog_api_key=$DD_API_KEY"
+              export DD_API_KEY=$(aws secretsmanager get-secret-value --secret-id datadog_api_key --query SecretString --output text)
+              sudo ansible-playbook ./Ansible_Playbook/bastion_host_setup.yml --extra-vars "datadog_api_key=$DD_API_KEY"
               EOF
 }
 
