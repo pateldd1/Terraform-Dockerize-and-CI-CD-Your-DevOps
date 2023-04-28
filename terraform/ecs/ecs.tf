@@ -6,14 +6,14 @@ resource "aws_ecs_task_definition" "this" {
   family                   = "devops-task"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = "256"
-  memory                   = "512"
+  cpu                      = var.ecs_task_cpu
+  memory                   = var.ecs_task_memory
   execution_role_arn       = aws_iam_role.ecs_execution_role.arn
   task_role_arn            = aws_iam_role.ecs_task_role.arn
 
   container_definitions = jsonencode([{
     name  = "devops-app"
-    image = "429363805278.dkr.ecr.us-east-1.amazonaws.com/interview:latest"
+    image = var.ecr_image
     portMappings = [{
       containerPort = 80
     }]
