@@ -41,4 +41,3 @@ app.get("/db_healthcheck", async function (_, res) {
 app.listen(process.env.PORT || "3000", "0.0.0.0", 10, () => {
   console.log("app is working on `http://localhost:3000/`...");
 });
-//
