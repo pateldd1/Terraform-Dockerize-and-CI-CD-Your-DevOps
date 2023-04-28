@@ -2,7 +2,9 @@ var express = require("express");
 var app = express();
 const PG_CONFIG = {
   user: process.env.DB_USER,
-  host: process.env.DB_HOST.match(/(.*):/)[1],
+  host: process.env.DB_HOST.match(/(.*):5432/)
+    ? process.env.DB_HOST.match(/(.*):5432/)[1]
+    : process.env.DB_HOST,
   database: process.env.DB_NAME,
   password: process.env.DB_PASS,
   port: 5432,
