@@ -4,13 +4,13 @@ resource "aws_db_subnet_group" "devops" {
 }
 
 resource "aws_db_instance" "devops" {
-  allocated_storage         = var.db_allocated_storage
+  allocated_storage         = var.db_allocated_storage_in_gb
   engine                    = "postgres"
   engine_version            = var.db_engine_version
   instance_class            = var.db_instance_type
-  db_name                   = "devops-db"
+  db_name                   = "devopsDB"
   skip_final_snapshot       = true
-  final_snapshot_identifier = "snapshot_db"
+  final_snapshot_identifier = "snapshot-db"
   username                  = jsondecode(data.aws_secretsmanager_secret_version.db_credentials.secret_string)["username"]
   password                  = jsondecode(data.aws_secretsmanager_secret_version.db_credentials.secret_string)["password"]
   vpc_security_group_ids    = [aws_security_group.main.id]

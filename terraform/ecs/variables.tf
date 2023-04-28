@@ -31,7 +31,7 @@ variable "ecs_task_memory" {
   description = "ECS Task memory"
   type        = string
 }
-variable "bastion_instance_tye" {
+variable "bastion_instance_type" {
   description = "Bastion Host EC2 instance type"
   type        = string
 }
