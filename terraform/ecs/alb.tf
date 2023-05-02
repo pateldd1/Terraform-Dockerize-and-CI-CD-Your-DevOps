@@ -102,7 +102,7 @@ resource "aws_route53_record" "this" {
 }
 
 resource "aws_route53_zone" "this" {
-  name = var.dn
+  name = var.domain_name
 
   tags = {
     Terraform   = "true"

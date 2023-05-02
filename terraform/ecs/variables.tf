@@ -51,7 +51,7 @@ variable "fqdn" {
   description = "FQDN of the app"
   type        = string
 }
-variable "dn" {
+variable "domain_name" {
   description = "Domain name of the app"
   type        = string
 }
