@@ -1,4 +1,8 @@
-# Instructions to run the app
+# Terraform 
+
+
+
+# Instructions to run the app locally
 1. Install Node (Google Instructions)
 
 2. Install Dependencies for the App

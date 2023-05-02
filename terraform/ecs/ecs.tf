@@ -22,6 +22,10 @@ resource "aws_ecs_task_definition" "this" {
       {
         name  = "DB_HOST"
         value = aws_db_instance.devops.endpoint
+      },
+      {
+        name  = "PORT"
+        value = "80"
       }
     ]
 
@@ -37,10 +41,6 @@ resource "aws_ecs_task_definition" "this" {
       {
         name      = "DB_NAME"
         valueFrom = "${data.aws_secretsmanager_secret_version.db_credentials.arn}:DB_NAME::"
-      },
-      {
-        name      = "PORT"
-        valueFrom = "${data.aws_secretsmanager_secret_version.db_credentials.arn}:PORT::"
       }
     ]
 
@@ -75,5 +75,5 @@ resource "aws_ecs_service" "this" {
 
   desired_count = 1
 
-  depends_on = [aws_db_instance.devops, aws_lb_listener.this]
+  depends_on = [aws_db_instance.devops, aws_lb_listener.http, aws_lb_listener.https]
 }

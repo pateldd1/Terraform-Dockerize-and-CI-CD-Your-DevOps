@@ -47,3 +47,11 @@ variable "alb_target_group_healthcheck_path" {
   description = "ALB target group health check pattern"
   type        = string
 }
+variable "fqdn" {
+  description = "FQDN of the app"
+  type        = string
+}
+variable "dn" {
+  description = "Domain name of the app"
+  type        = string
+}
