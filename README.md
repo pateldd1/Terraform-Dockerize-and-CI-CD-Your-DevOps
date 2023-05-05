@@ -7,7 +7,7 @@
    username = <your desired db username>
    password = <your desired db password>
    ```
-3. Go to AWS ECR, create a repo, and follow the push commands to push your image to Amazon ECR. Don't forget to change ECR_REGISTRY and ECR_REPOSITORY in .github/main.yml to what you have.
+3. Go to AWS ECR, create a repo, and follow the push commands to push your image to Amazon ECR. Don't forget to change ECR_REGISTRY and ECR_REPOSITORY in .github/main.yml to what you have. Also, don't forget to update ecr_image in terraform.tfvars.
 4. If adding a certificate to your load balancer to allow https trafic, go to your registrar (like GoDaddy or IONOS). Type in terraform apply and do not click yes. Get the output for the name servers and update these name servers in your GoDaddy, IONOS, etc. account. 
 5. In terraform.tfvars, input your own values
 
