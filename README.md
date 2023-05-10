@@ -13,7 +13,7 @@
 
 ### Automatic steps
 1. Type in terraform apply and type in yes to apply when prompted
-2. If there is an error coming from the certificate validation, please wait 2 minutes and type in terraform apply again.
+2. If there is an error coming from the certificate validation or it is taking longer than 10 minutes, ctrl+c out, and please wait 2 minutes and type in terraform apply again.
 
 ### Running in production
 1. In your terraform.tfvars, whatever you put for fqdn will be the fully qualified domain name and your app will work on that domain. 
