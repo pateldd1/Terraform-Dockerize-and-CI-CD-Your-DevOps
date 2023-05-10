@@ -1,3 +1,6 @@
+# Terraform AWS diagram setup
+![AWS ECS Setup](AWS_ECS_setup_v1.png "AWS ECS Setup")
+
 # Create all resources with Terraform 
 ### Manual Steps
 1. Add your AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY to github actions from Settings -> secrets and variables -> actions. Also, run AWS configure and add your AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY locally. These values can be changed in the ~/.aws/credentials file as well.
