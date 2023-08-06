@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: interview-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels: 
+      app: interview
+  template:
+    metadata:
+      name: interview
+      labels: 
+        app: interview
+    spec:
+      imagePullSecrets:
+      - name: ecr-secret
+      containers:
+        - name: interview
+          image: 429363805278.dkr.ecr.us-east-1.amazonaws.com/interview:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: my-app-secrets
+                  key: DB_NAME
+            - name: PORT
+              valueFrom:
+                secretKeyRef:
+                  name: my-app-secrets
+                  key: PORT
+            - name: username
+              valueFrom:
+                secretKeyRef:
+                  name: my-app-secrets
+                  key: username
+            - name: password
+              valueFrom:
+                secretKeyRef:
+                  name: my-app-secrets
+                  key: password
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: interview-service
+  labels: 
+    app: interview
+spec:
+  type: LoadBalancer
+  selector:
+    app: interview
+  ports:
+    - port: 3000
+      targetPort: 80

@@ -116,3 +116,5 @@ my_password.txt
 
 .terraform/
 .vagrant/
+
+helm_secrets.yaml
