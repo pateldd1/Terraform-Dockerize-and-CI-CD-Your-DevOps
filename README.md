@@ -1,4 +1,4 @@
-# Terraform AWS diagram setup
+# Terraform AWS ECS diagram setup
 ![AWS ECS Setup](AWS_ECS_setup_v1.png "AWS ECS Setup")
 
 # Create all resources with Terraform 
