@@ -43,3 +43,16 @@ to run `/db_healthcheck` endpoint
 # CI/CD
 * Any time you push to the main branch in github, a continuous integration and delivery process will be initiated to update the app in production. 
 
+
+# Kubernetes
+Path-based ingress:
+* In ingress folder, do 
+  ```
+      kubectl apply -f nginx-deployment-and-service.yaml
+      kubectl apply -f httpbin-deployment-and-service.yaml
+      kubectl create namespace ingress-nginx
+      helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx
+      kubectl apply -f path-based-ingress.yaml
+      kubectl get svc --all-namespaces
+  ```
+* After getting services in all namespaces, get the external ip and go to \<external-ip>/nginx and \<external-ip>/httpbin for path-based routing
