@@ -48,6 +48,7 @@ to run `/db_healthcheck` endpoint
 Path-based ingress:
 * In ingress folder, do 
   ```
+      eksctl create cluster --name my-eks-cluster-2 --region us-east-1 --nodegroup-name standard-workers --node-type t3.medium --nodes 3 --nodes-min 1 --nodes-max 4 --managed
       kubectl apply -f nginx-deployment-and-service.yaml
       kubectl apply -f httpbin-deployment-and-service.yaml
       kubectl create namespace ingress-nginx
