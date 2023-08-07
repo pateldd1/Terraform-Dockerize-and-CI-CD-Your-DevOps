@@ -13,34 +13,11 @@ spec:
       labels: 
         app: interview
     spec:
-      imagePullSecrets:
-      - name: ecr-secret
       containers:
         - name: interview
-          image: 429363805278.dkr.ecr.us-east-1.amazonaws.com/interview:latest
+          image: nginx
           ports:
             - containerPort: 3000
-          env:
-            - name: DB_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: my-app-secrets
-                  key: DB_NAME
-            - name: PORT
-              valueFrom:
-                secretKeyRef:
-                  name: my-app-secrets
-                  key: PORT
-            - name: username
-              valueFrom:
-                secretKeyRef:
-                  name: my-app-secrets
-                  key: username
-            - name: password
-              valueFrom:
-                secretKeyRef:
-                  name: my-app-secrets
-                  key: password
 
 ---
 
